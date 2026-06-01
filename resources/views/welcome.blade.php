@@ -113,7 +113,25 @@
                 <div class="service-info">
                     <h3 class="service-title">{{ $service->title }}</h3>
                     <p class="service-desc">{{ $service->description }}</p>
-                    <a href="#" class="learn-more">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+                    
+                    @if($service->projects->count() > 0)
+                    <div class="service-projects-badges">
+                        @foreach($service->projects->take(3) as $proj)
+                            <span class="project-pill-tag">
+                                <i class="fa-solid fa-cube"></i> {{ $proj->title }}
+                            </span>
+                        @endforeach
+                        @if($service->projects->count() > 3)
+                            <span class="project-pill-tag count">+{{ $service->projects->count() - 3 }} more</span>
+                        @endif
+                    </div>
+                    @endif
+
+                    @if($service->projects->count() > 0)
+                        <a href="javascript:void(0)" class="learn-more view-service-projects-btn" data-service-title="{{ $service->title }}" data-projects="{{ json_encode($service->projects) }}">View Work <i class="fa-solid fa-arrow-right"></i></a>
+                    @else
+                        <a href="#contact" class="learn-more">Inquire Work <i class="fa-solid fa-arrow-right"></i></a>
+                    @endif
                 </div>
             </div>
             @endforeach
@@ -374,6 +392,85 @@
         if (statsSection) {
             observer.observe(statsSection);
         }
+    </script>
+
+    <!-- Modern Projects Modal -->
+    <div id="service-projects-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="modal-close-btn">&times;</button>
+            <h2 id="modal-service-title" class="modal-title">Service Projects</h2>
+            <div id="modal-projects-grid" class="modal-projects-grid">
+                <!-- Dynamic project cards go here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal logic
+        const modal = document.getElementById('service-projects-modal');
+        const modalTitle = document.getElementById('modal-service-title');
+        const modalGrid = document.getElementById('modal-projects-grid');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        document.querySelectorAll('.view-service-projects-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const title = btn.getAttribute('data-service-title');
+                const projects = JSON.parse(btn.getAttribute('data-projects'));
+
+                modalTitle.innerText = `${title} Projects`;
+                modalGrid.innerHTML = '';
+
+                projects.forEach(project => {
+                    const projectCard = document.createElement('div');
+                    projectCard.className = 'modal-project-card';
+
+                    const imageUrl = project.image_path.startsWith('/') ? project.image_path : `/storage/${project.image_path}`;
+                    
+                    let linkHtml = '';
+                    if (project.project_url) {
+                        linkHtml += `<a href="${project.project_url}" target="_blank" class="btn btn-primary btn-sm"><i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Site</a>`;
+                    }
+                    if (project.document_path) {
+                        const docUrl = `/storage/${project.document_path}`;
+                        linkHtml += `<a href="${docUrl}" target="_blank" class="btn btn-outline btn-sm" style="border: 1px solid var(--border-color);"><i class="fa-solid fa-file-pdf"></i> View Doc</a>`;
+                    }
+
+                    projectCard.innerHTML = `
+                        <div class="modal-project-img">
+                            <img src="${imageUrl}" alt="${project.title}">
+                        </div>
+                        <div class="modal-project-info">
+                            <h3>${project.title}</h3>
+                            <span class="modal-project-category">${project.category}</span>
+                            <div class="modal-project-actions">
+                                ${linkHtml}
+                            </div>
+                        </div>
+                    `;
+                    modalGrid.appendChild(projectCard);
+                });
+
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden'; // Disable scroll background
+            });
+        });
+
+        const closeModal = () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = ''; // Restore scroll
+        };
+
+        modalCloseBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.style.display === 'flex') {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>

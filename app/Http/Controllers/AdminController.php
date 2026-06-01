@@ -26,13 +26,14 @@ class AdminController extends Controller
     // Projects
     public function projects()
     {
-        $projects = Project::all();
+        $projects = Project::with('service')->get();
         return view('admin.projects.index', compact('projects'));
     }
 
     public function projectCreate()
     {
-        return view('admin.projects.create');
+        $services = Service::all();
+        return view('admin.projects.create', compact('services'));
     }
 
     public function projectStore(Request $request)
@@ -40,6 +41,7 @@ class AdminController extends Controller
         $data = $request->validate([
             'title' => 'required',
             'category' => 'required',
+            'service_id' => 'nullable|exists:services,id',
             'project_url' => 'nullable|url',
             'image_path' => 'required|image',
             'document_path' => 'nullable|file|mimes:pdf,doc,docx,zip|max:10240'
@@ -59,7 +61,8 @@ class AdminController extends Controller
 
     public function projectEdit(Project $project)
     {
-        return view('admin.projects.edit', compact('project'));
+        $services = Service::all();
+        return view('admin.projects.edit', compact('project', 'services'));
     }
 
     public function projectUpdate(Request $request, Project $project)
@@ -67,6 +70,7 @@ class AdminController extends Controller
         $data = $request->validate([
             'title' => 'required',
             'category' => 'required',
+            'service_id' => 'nullable|exists:services,id',
             'project_url' => 'nullable|url',
             'image_path' => 'nullable|image',
             'document_path' => 'nullable|file|mimes:pdf,doc,docx,zip|max:10240'

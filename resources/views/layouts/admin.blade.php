@@ -55,7 +55,12 @@
                         <span class="user-role">Super Admin</span>
                     </div>
                 </div>
-                <a href="#" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i></a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+                <a href="#" class="logout-btn" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
             </div>
         </aside>
 

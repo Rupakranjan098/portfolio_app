@@ -14,6 +14,7 @@
                     <th>Image</th>
                     <th>Title</th>
                     <th>Category</th>
+                    <th>Service Card</th>
                     <th>Doc</th>
                     <th>Actions</th>
                 </tr>
@@ -28,6 +29,15 @@
                     </td>
                     <td style="font-weight: 600;">{{ $project->title }}</td>
                     <td><span style="padding: 4px 10px; background: var(--bg-main); border-radius: 20px; font-size: 12px; color: var(--text-muted); border: 1px solid var(--border-color);">{{ $project->category }}</span></td>
+                    <td>
+                        @if($project->service)
+                            <span style="padding: 4px 10px; background: rgba(228, 110, 30, 0.1); border-radius: 20px; font-size: 12px; color: var(--primary); border: 1px solid rgba(228, 110, 30, 0.2);">
+                                <i class="fa-solid {{ $project->service->icon }}"></i> {{ $project->service->title }}
+                            </span>
+                        @else
+                            <span style="color: var(--text-muted); font-size: 12px; font-style: italic;">None</span>
+                        @endif
+                    </td>
                     <td>
                         @if($project->document_path)
                             <a href="{{ Storage::url($project->document_path) }}" target="_blank" style="color: #ff6b01; font-size: 18px;" title="View Document">

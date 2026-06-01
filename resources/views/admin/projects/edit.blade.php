@@ -9,14 +9,23 @@
 <div class="card">
     <form action="{{ route('admin.projects.update', $project) }}" method="POST" enctype="multipart/form-data">
         @csrf
-        <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px;">
             <div class="form-group">
                 <label>Project Title</label>
-                <input type="text" class="form-control" name="title" value="{{ old('title', $project->title) }}">
+                <input type="text" class="form-control" name="title" value="{{ old('title', $project->title) }}" required>
             </div>
             <div class="form-group">
                 <label>Category</label>
-                <input type="text" class="form-control" name="category" value="{{ old('category', $project->category) }}">
+                <input type="text" class="form-control" name="category" value="{{ old('category', $project->category) }}" required>
+            </div>
+            <div class="form-group">
+                <label>Link to Service Card</label>
+                <select class="form-control" name="service_id">
+                    <option value="">-- None / Select Service --</option>
+                    @foreach($services as $service)
+                        <option value="{{ $service->id }}" {{ old('service_id', $project->service_id) == $service->id ? 'selected' : '' }}>{{ $service->title }}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
 

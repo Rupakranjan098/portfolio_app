@@ -12,6 +12,14 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        \App\Models\User::updateOrCreate(
+            ['email' => 'admin@admin.com'],
+            [
+                'name' => 'Admin User',
+                'password' => bcrypt('password'),
+            ]
+        );
+
         Profile::create([
             'name' => 'Rupak Ranjan Mohanta',
             'subtitle' => 'React Native developer',
