@@ -40,21 +40,37 @@ class DatabaseSeeder extends Seeder
         Project::create([
             'title' => 'TaskFlow Dashboard',
             'category' => 'UI/UX Design',
+            'description' => 'A modern dashboard interface for task management and team collaboration.',
+            'card_theme' => 'purple',
+            'card_icon' => 'fa-solid fa-chart-pie',
+            'card_tag' => 'UI/UX',
             'image_path' => 'project_dashboard_1777704042616.png'
         ]);
         Project::create([
             'title' => 'Agency Website',
             'category' => 'Frontend Development',
+            'description' => 'Clean and responsive agency website built for a digital studio.',
+            'card_theme' => 'orange',
+            'card_icon' => 'fa-solid fa-globe',
+            'card_tag' => 'Frontend',
             'image_path' => 'project_agency_1777704055843.png'
         ]);
         Project::create([
             'title' => 'E-Commerce Store',
             'category' => 'UI/UX & Development',
+            'description' => 'Full-featured online store with product listings and cart functionality.',
+            'card_theme' => 'green',
+            'card_icon' => 'fa-solid fa-cart-shopping',
+            'card_tag' => 'Full Stack',
             'image_path' => 'project_ecommerce_1777704074943.png'
         ]);
         Project::create([
             'title' => 'Personal Portfolio',
             'category' => 'UI/UX & Development',
+            'description' => 'Personal portfolio showcasing my work, skills, and experience.',
+            'card_theme' => 'blue',
+            'card_icon' => 'fa-solid fa-user',
+            'card_tag' => 'Frontend',
             'image_path' => 'project_portfolio_1777704102718.png'
         ]);
 

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('card_theme')->default('purple')->after('category');
             $table->string('card_icon')->default('fa-solid fa-cube')->after('card_theme');
             $table->string('card_tag')->default('Dev')->after('card_icon');
+            $table->text('description')->nullable()->after('card_tag');
         });
     }
 
@@ -24,7 +25,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->dropColumn(['card_theme', 'card_icon', 'card_tag']);
+            $table->dropColumn(['card_theme', 'card_icon', 'card_tag', 'description']);
         });
     }
 };
