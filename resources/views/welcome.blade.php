@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ time() }}">
 </head>
 <body>
     <nav class="navbar container">
@@ -60,7 +60,13 @@
                 <span class="status-dot"></span> Available for<br/><strong>Freelance</strong>
             </div>
             @endif
-            <img src="{{ str_starts_with($profile->hero_image, '/') ? $profile->hero_image : Storage::url($profile->hero_image) }}" alt="{{ $profile->name }} 3D avatar">
+            @php
+                $heroImgUrl = $profile->hero_image;
+                if (!str_starts_with($heroImgUrl, 'http') && !str_starts_with($heroImgUrl, '/')) {
+                    $heroImgUrl = asset('storage/' . $heroImgUrl);
+                }
+            @endphp
+            <img src="{{ $heroImgUrl }}" alt="{{ $profile->name }} 3D avatar">
             <div class="decoration-dots"></div>
         </div>
     </header>
@@ -141,23 +147,45 @@
     <section id="projects" class="projects container">
         <div class="section-header">
             <div>
-                <div class="section-label">My Work</div>
+                <div class="section-label"><span class="badge-dot"></span> My Work</div>
                 <h2 class="section-title">Featured Projects</h2>
             </div>
-            <a href="#" class="view-all">View All Projects <i class="fa-solid fa-arrow-right"></i></a>
+            <a href="#" class="view-all">View All Projects <span class="view-all-circle"><i class="fa-solid fa-arrow-right"></i></span></a>
         </div>
         <div class="projects-grid">
             @foreach($projects as $project)
-            <div class="project-card">
+            @php
+                $themeClass = 'theme-' . ($project->card_theme ?: 'purple');
+                $iconClass = $project->card_icon ?: 'fa-solid fa-cube';
+                $tagText = $project->card_tag ?: 'Dev';
+
+                $imageUrl = $project->image_path;
+                if (!str_starts_with($imageUrl, 'http') && !str_starts_with($imageUrl, '/')) {
+                    $imageUrl = asset('storage/' . $imageUrl);
+                }
+            @endphp
+            <div class="premium-project-card {{ $themeClass }}">
                 @if($project->project_url)
-                <a href="{{ $project->project_url }}" target="_blank" class="project-link-wrapper" style="text-decoration: none; color: inherit;">
+                <a href="{{ $project->project_url }}" target="_blank" class="premium-project-link">
                 @endif
-                <div class="project-img">
-                    <img src="{{ str_starts_with($project->image_path, '/') ? $project->image_path : Storage::url($project->image_path) }}" alt="{{ $project->title }}">
+                <div class="premium-project-img-wrapper">
+                    <img src="{{ $imageUrl }}" alt="{{ $project->title }}">
+                    <div class="premium-project-icon">
+                        <i class="{{ $iconClass }}"></i>
+                    </div>
                 </div>
-                <div class="project-info">
-                    <h3 class="project-title">{{ $project->title }}</h3>
-                    <p class="project-category">{{ $project->category }}</p>
+                <div class="premium-project-info">
+                    <h3 class="premium-project-title">{{ $project->title }}</h3>
+                    <span class="premium-project-category">{{ $project->category }}</span>
+                    @if($project->description)
+                        <p class="premium-project-desc">{{ $project->description }}</p>
+                    @endif
+                    <div class="premium-project-footer">
+                        <span class="premium-tag">{{ $tagText }}</span>
+                        <div class="premium-arrow-btn">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </div>
                 </div>
                 @if($project->project_url)
                 </a>
@@ -200,7 +228,7 @@
                     <div class="step-number">{{ str_pad($process->step_number, 2, '0', STR_PAD_LEFT) }}</div>
                     <div class="step-circle" style="overflow: hidden;">
                         @if(str_starts_with($process->icon, 'http') || str_starts_with($process->icon, '/') || str_starts_with($process->icon, 'processes/'))
-                            <img src="{{ str_starts_with($process->icon, 'processes/') ? Storage::url($process->icon) : $process->icon }}" alt="" style="width: 100%; height: 100%; object-fit: contain; padding: 10px;">
+                            <img src="{{ str_starts_with($process->icon, 'processes/') ? asset('storage/' . $process->icon) : $process->icon }}" alt="" style="width: 100%; height: 100%; object-fit: contain; padding: 10px;">
                         @else
                             <i class="{{ $process->icon }}"></i>
                         @endif
@@ -424,14 +452,17 @@
                     const projectCard = document.createElement('div');
                     projectCard.className = 'modal-project-card';
 
-                    const imageUrl = project.image_path.startsWith('/') ? project.image_path : `/storage/${project.image_path}`;
+                    const baseUrl = "{{ asset('') }}";
+                    const imageUrl = project.image_path.startsWith('http') || project.image_path.startsWith('/') 
+                        ? project.image_path 
+                        : `${baseUrl}storage/${project.image_path}`;
                     
                     let linkHtml = '';
                     if (project.project_url) {
                         linkHtml += `<a href="${project.project_url}" target="_blank" class="btn btn-primary btn-sm"><i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Site</a>`;
                     }
                     if (project.document_path) {
-                        const docUrl = `/storage/${project.document_path}`;
+                        const docUrl = `${baseUrl}storage/${project.document_path}`;
                         linkHtml += `<a href="${docUrl}" target="_blank" class="btn btn-outline btn-sm" style="border: 1px solid var(--border-color);"><i class="fa-solid fa-file-pdf"></i> View Doc</a>`;
                     }
 

@@ -23,7 +23,13 @@
                 @foreach($projects as $project)
                 <tr>
                     <td>
-                        <img src="{{ str_starts_with($project->image_path, '/') ? $project->image_path : Storage::url($project->image_path) }}" 
+                        @php
+                            $imageUrl = $project->image_path;
+                            if (!str_starts_with($imageUrl, 'http') && !str_starts_with($imageUrl, '/')) {
+                                $imageUrl = asset('storage/' . $imageUrl);
+                            }
+                        @endphp
+                        <img src="{{ $imageUrl }}" 
                              alt="{{ $project->title }}" 
                              style="width: 80px; height: 50px; object-fit: cover; border-radius: 6px;">
                     </td>

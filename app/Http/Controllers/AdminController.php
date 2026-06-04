@@ -40,12 +40,23 @@ class AdminController extends Controller
     {
         $data = $request->validate([
             'title' => 'required',
+            'subtitle' => 'nullable|string',
             'category' => 'required',
             'service_id' => 'nullable|exists:services,id',
             'project_url' => 'nullable|url',
+            'github_url' => 'nullable|url',
             'image_path' => 'required|image',
-            'document_path' => 'nullable|file|mimes:pdf,doc,docx,zip|max:10240'
+            'document_path' => 'nullable|file|mimes:pdf,doc,docx,zip|max:10240',
+            'description' => 'nullable|string',
+            'features' => 'nullable|string',
+            'tech_stack' => 'nullable|string',
+            'stats' => 'nullable|string',
+            'card_theme' => 'nullable|string|in:purple,orange,green,blue',
+            'card_icon' => 'nullable|string',
+            'card_tag' => 'nullable|string',
         ]);
+
+        $data['is_featured'] = $request->has('is_featured');
 
         if ($request->hasFile('image_path')) {
             $data['image_path'] = $request->file('image_path')->store('projects', 'public');
@@ -69,12 +80,23 @@ class AdminController extends Controller
     {
         $data = $request->validate([
             'title' => 'required',
+            'subtitle' => 'nullable|string',
             'category' => 'required',
             'service_id' => 'nullable|exists:services,id',
             'project_url' => 'nullable|url',
+            'github_url' => 'nullable|url',
             'image_path' => 'nullable|image',
-            'document_path' => 'nullable|file|mimes:pdf,doc,docx,zip|max:10240'
+            'document_path' => 'nullable|file|mimes:pdf,doc,docx,zip|max:10240',
+            'description' => 'nullable|string',
+            'features' => 'nullable|string',
+            'tech_stack' => 'nullable|string',
+            'stats' => 'nullable|string',
+            'card_theme' => 'nullable|string|in:purple,orange,green,blue',
+            'card_icon' => 'nullable|string',
+            'card_tag' => 'nullable|string',
         ]);
+
+        $data['is_featured'] = $request->has('is_featured');
 
         if ($request->hasFile('image_path')) {
             if ($project->image_path) Storage::disk('public')->delete($project->image_path);
