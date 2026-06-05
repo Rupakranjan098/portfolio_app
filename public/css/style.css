@@ -756,14 +756,15 @@ img {
 }
 
 .skill-box i {
-    font-size: 2.5rem;
+    font-size: 3.5rem;
     color: var(--primary-color);
     transition: var(--transition);
 }
 
-.skill-box img {
-    width: 40px;
-    height: 40px;
+.skill-box img,
+.skill-box svg {
+    width: 55px;
+    height: 55px;
     object-fit: contain;
     filter: grayscale(0);
     transition: var(--transition);
