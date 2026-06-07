@@ -289,18 +289,18 @@
                     <h4>Connect</h4>
                     <ul>
                         @if($profile->email) <li><a href="mailto:{{ $profile->email }}">Email Me</a></li> @endif
-                        @if($profile->linkedin_url) <li><a href="{{ $profile->linkedin_url }}" target="_blank">LinkedIn</a></li> @endif
-                        @if($profile->github_url) <li><a href="{{ $profile->github_url }}" target="_blank">GitHub</a></li> @endif
+                        @if($profile->linkedin_url) <li><a href="{{ $profile->linkedin_url }}" target="_blank" rel="noopener noreferrer">LinkedIn</a></li> @endif
+                        @if($profile->github_url) <li><a href="{{ $profile->github_url }}" target="_blank" rel="noopener noreferrer">GitHub</a></li> @endif
                     </ul>
                 </div>
             </div>
             <div class="footer-social">
                 <h4>Let's Connect</h4>
                 <div class="social-links">
-                    @if($profile->linkedin_url) <a href="{{ $profile->linkedin_url }}" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a> @endif
-                    @if($profile->github_url) <a href="{{ $profile->github_url }}" target="_blank"><i class="fa-brands fa-github"></i></a> @endif
-                    @if($profile->twitter_url) <a href="{{ $profile->twitter_url }}" target="_blank"><i class="fa-brands fa-twitter"></i></a> @endif
-                    @if($profile->website_url) <a href="{{ $profile->website_url }}" target="_blank"><i class="fa-solid fa-globe"></i></a> @endif
+                    @if($profile->linkedin_url) <a href="{{ $profile->linkedin_url }}" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in"></i></a> @endif
+                    @if($profile->github_url) <a href="{{ $profile->github_url }}" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-github"></i></a> @endif
+                    @if($profile->twitter_url) <a href="{{ $profile->twitter_url }}" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-twitter"></i></a> @endif
+                    @if($profile->website_url) <a href="{{ $profile->website_url }}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-globe"></i></a> @endif
                 </div>
             </div>
         </div>

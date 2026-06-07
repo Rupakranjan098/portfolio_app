@@ -38,8 +38,14 @@ class AdminController extends Controller
 
     public function projectStore(Request $request)
     {
-        if ($request->has('project_url') || $request->has('github_url')) {
-            $request->merge($this->sanitizeUrls($request->all(), ['project_url', 'github_url']));
+        $urlFields = ['project_url', 'github_url'];
+        foreach ($urlFields as $field) {
+            if ($request->filled($field)) {
+                $value = trim($request->input($field));
+                if (!preg_match('/^https?:\/\//i', $value)) {
+                    $request->merge([$field => 'https://' . $value]);
+                }
+            }
         }
 
         $data = $request->validate([
@@ -82,8 +88,14 @@ class AdminController extends Controller
 
     public function projectUpdate(Request $request, Project $project)
     {
-        if ($request->has('project_url') || $request->has('github_url')) {
-            $request->merge($this->sanitizeUrls($request->all(), ['project_url', 'github_url']));
+        $urlFields = ['project_url', 'github_url'];
+        foreach ($urlFields as $field) {
+            if ($request->filled($field)) {
+                $value = trim($request->input($field));
+                if (!preg_match('/^https?:\/\//i', $value)) {
+                    $request->merge([$field => 'https://' . $value]);
+                }
+            }
         }
 
         $data = $request->validate([
@@ -247,10 +259,17 @@ class AdminController extends Controller
 
     public function profileUpdate(Request $request)
     {
-        $urlFields = ['linkedin_url', 'github_url', 'twitter_url', 'website_url'];
-        $request->merge($this->sanitizeUrls($request->all(), $urlFields));
-
         $profile = Profile::first();
+        $urlFields = ['linkedin_url', 'github_url', 'twitter_url', 'website_url'];
+        foreach ($urlFields as $field) {
+            if ($request->filled($field)) {
+                $value = trim($request->input($field));
+                if (!preg_match('/^https?:\/\//i', $value)) {
+                    $request->merge([$field => 'https://' . $value]);
+                }
+            }
+        }
+
         $data = $request->validate([
             'name' => 'required',
             'subtitle' => 'required',
@@ -429,19 +448,5 @@ class AdminController extends Controller
     public function documentation()
     {
         return view('admin.documentation');
-    }
-
-    protected function sanitizeUrls(array $data, array $fields)
-    {
-        foreach ($fields as $field) {
-            if (!empty($data[$field])) {
-                $url = trim($data[$field]);
-                if (!preg_match('/^(https?:)?\/\//i', $url)) {
-                    $url = 'https://' . $url;
-                }
-                $data[$field] = $url;
-            }
-        }
-        return $data;
     }
 }

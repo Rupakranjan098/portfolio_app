@@ -22,9 +22,6 @@ class ProjectForm
                 TextInput::make('project_url')
                     ->url()
                     ->label('Project URL'),
-                TextInput::make('github_url')
-                    ->url()
-                    ->label('GitHub URL'),
             ]);
     }
 }

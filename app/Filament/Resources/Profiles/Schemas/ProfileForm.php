@@ -26,18 +26,6 @@ class ProfileForm
                 Toggle::make('available_for_freelance')
                     ->required(),
                 TextInput::make('cv_path'),
-                TextInput::make('github_url')
-                    ->url()
-                    ->label('GitHub URL'),
-                TextInput::make('linkedin_url')
-                    ->url()
-                    ->label('LinkedIn URL'),
-                TextInput::make('twitter_url')
-                    ->url()
-                    ->label('Twitter URL'),
-                TextInput::make('website_url')
-                    ->url()
-                    ->label('Website URL'),
             ]);
     }
 }
