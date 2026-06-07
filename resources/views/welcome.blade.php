@@ -175,22 +175,37 @@
                         <i class="{{ $iconClass }}"></i>
                     </div>
                 </div>
+                @if($project->project_url)
+                </a>
+                @endif
                 <div class="premium-project-info">
+                    @if($project->project_url)
+                    <a href="{{ $project->project_url }}" target="_blank" class="premium-project-title-link">
+                    @endif
                     <h3 class="premium-project-title">{{ $project->title }}</h3>
+                    @if($project->project_url)
+                    </a>
+                    @endif
                     <span class="premium-project-category">{{ $project->category }}</span>
                     @if($project->description)
                         <p class="premium-project-desc">{{ $project->description }}</p>
                     @endif
                     <div class="premium-project-footer">
                         <span class="premium-tag">{{ $tagText }}</span>
-                        <div class="premium-arrow-btn">
-                            <i class="fa-solid fa-arrow-right"></i>
+                        <div class="premium-project-actions">
+                            @if($project->github_url)
+                            <a href="{{ $project->github_url }}" target="_blank" class="premium-action-btn github-btn" title="GitHub Repository">
+                                <i class="fa-brands fa-github"></i>
+                            </a>
+                            @endif
+                            @if($project->project_url)
+                            <a href="{{ $project->project_url }}" target="_blank" class="premium-action-btn live-btn" title="Live Site">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                            @endif
                         </div>
                     </div>
                 </div>
-                @if($project->project_url)
-                </a>
-                @endif
             </div>
             @endforeach
         </div>
@@ -461,6 +476,9 @@
                     let linkHtml = '';
                     if (project.project_url) {
                         linkHtml += `<a href="${project.project_url}" target="_blank" class="btn btn-primary btn-sm"><i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Site</a>`;
+                    }
+                    if (project.github_url) {
+                        linkHtml += `<a href="${project.github_url}" target="_blank" class="btn btn-outline btn-sm" style="border: 1px solid var(--border-color);"><i class="fa-brands fa-github"></i> GitHub</a>`;
                     }
                     if (project.document_path) {
                         const docUrl = `${baseUrl}storage/${project.document_path}`;

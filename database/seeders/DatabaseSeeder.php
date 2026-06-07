@@ -44,7 +44,9 @@ class DatabaseSeeder extends Seeder
             'card_theme' => 'purple',
             'card_icon' => 'fa-solid fa-chart-pie',
             'card_tag' => 'UI/UX',
-            'image_path' => 'project_dashboard_1777704042616.png'
+            'image_path' => 'project_dashboard_1777704042616.png',
+            'project_url' => 'https://taskflow-dashboard-demo.example.com',
+            'github_url' => 'https://github.com/Rupakranjan098/taskflow-dashboard'
         ]);
         Project::create([
             'title' => 'Agency Website',
@@ -53,7 +55,9 @@ class DatabaseSeeder extends Seeder
             'card_theme' => 'orange',
             'card_icon' => 'fa-solid fa-globe',
             'card_tag' => 'Frontend',
-            'image_path' => 'project_agency_1777704055843.png'
+            'image_path' => 'project_agency_1777704055843.png',
+            'project_url' => 'https://agency-website-demo.example.com',
+            'github_url' => 'https://github.com/Rupakranjan098/agency-website'
         ]);
         Project::create([
             'title' => 'E-Commerce Store',
@@ -62,7 +66,9 @@ class DatabaseSeeder extends Seeder
             'card_theme' => 'green',
             'card_icon' => 'fa-solid fa-cart-shopping',
             'card_tag' => 'Full Stack',
-            'image_path' => 'project_ecommerce_1777704074943.png'
+            'image_path' => 'project_ecommerce_1777704074943.png',
+            'project_url' => 'https://ecommerce-store-demo.example.com',
+            'github_url' => 'https://github.com/Rupakranjan098/ecommerce-store'
         ]);
         Project::create([
             'title' => 'Personal Portfolio',
@@ -71,7 +77,9 @@ class DatabaseSeeder extends Seeder
             'card_theme' => 'blue',
             'card_icon' => 'fa-solid fa-user',
             'card_tag' => 'Frontend',
-            'image_path' => 'project_portfolio_1777704102718.png'
+            'image_path' => 'project_portfolio_1777704102718.png',
+            'project_url' => 'https://personal-portfolio-demo.example.com',
+            'github_url' => 'https://github.com/Rupakranjan098/portfolio_app'
         ]);
 
         Service::create([
