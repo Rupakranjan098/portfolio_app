@@ -38,6 +38,10 @@ class AdminController extends Controller
 
     public function projectStore(Request $request)
     {
+        if ($request->has('project_url') || $request->has('github_url')) {
+            $request->merge($this->sanitizeUrls($request->all(), ['project_url', 'github_url']));
+        }
+
         $data = $request->validate([
             'title' => 'required',
             'subtitle' => 'nullable|string',
@@ -78,6 +82,10 @@ class AdminController extends Controller
 
     public function projectUpdate(Request $request, Project $project)
     {
+        if ($request->has('project_url') || $request->has('github_url')) {
+            $request->merge($this->sanitizeUrls($request->all(), ['project_url', 'github_url']));
+        }
+
         $data = $request->validate([
             'title' => 'required',
             'subtitle' => 'nullable|string',
@@ -239,6 +247,9 @@ class AdminController extends Controller
 
     public function profileUpdate(Request $request)
     {
+        $urlFields = ['linkedin_url', 'github_url', 'twitter_url', 'website_url'];
+        $request->merge($this->sanitizeUrls($request->all(), $urlFields));
+
         $profile = Profile::first();
         $data = $request->validate([
             'name' => 'required',
@@ -418,5 +429,19 @@ class AdminController extends Controller
     public function documentation()
     {
         return view('admin.documentation');
+    }
+
+    protected function sanitizeUrls(array $data, array $fields)
+    {
+        foreach ($fields as $field) {
+            if (!empty($data[$field])) {
+                $url = trim($data[$field]);
+                if (!preg_match('/^(https?:)?\/\//i', $url)) {
+                    $url = 'https://' . $url;
+                }
+                $data[$field] = $url;
+            }
+        }
+        return $data;
     }
 }
