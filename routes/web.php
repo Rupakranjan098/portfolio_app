@@ -71,3 +71,12 @@ Route::prefix('custom-admin')->middleware('auth')->group(function () {
     Route::delete('/processes/{process}', [App\Http\Controllers\AdminController::class, 'processesDestroy'])->name('admin.processes.destroy');
 });
 
+// Temporary route to run migrations on production
+Route::get('/run-migrations', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        return 'Migrations run successfully:<br><pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre>';
+    } catch (\Exception $e) {
+        return 'Error running migrations: ' . $e->getMessage();
+    }
+});
