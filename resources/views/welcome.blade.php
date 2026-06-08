@@ -166,7 +166,24 @@
                 }
             @endphp
             <div class="premium-project-card {{ $themeClass }}">
-                @if($project->project_url)
+                @php
+                    $hasGallery = $project->additional_images && count($project->additional_images) > 0;
+                    $galleryJson = '';
+                    if ($hasGallery) {
+                        $galleryUrls = [];
+                        foreach ($project->additional_images as $img) {
+                            $galleryUrls[] = str_starts_with($img, 'http') || str_starts_with($img, '/') ? $img : asset('storage/' . $img);
+                        }
+                        $galleryJson = json_encode($galleryUrls);
+                    }
+                @endphp
+
+                @if($hasGallery)
+                <a href="javascript:void(0)" class="premium-project-link view-project-gallery-btn" 
+                   data-project-title="{{ $project->title }}"
+                   data-main-image="{{ $imageUrl }}"
+                   data-additional-images="{{ $galleryJson }}">
+                @elseif($project->project_url)
                 <a href="{{ $project->project_url }}" target="_blank" class="premium-project-link">
                 @endif
                 <div class="premium-project-img-wrapper">
@@ -175,7 +192,7 @@
                         <i class="{{ $iconClass }}"></i>
                     </div>
                 </div>
-                @if($project->project_url)
+                @if($hasGallery || $project->project_url)
                 </a>
                 @endif
                 <div class="premium-project-info">
@@ -193,6 +210,15 @@
                     <div class="premium-project-footer">
                         <span class="premium-tag">{{ $tagText }}</span>
                         <div class="premium-project-actions">
+                            @if($hasGallery)
+                            <a href="javascript:void(0)" class="premium-action-btn gallery-btn view-project-gallery-btn" 
+                               data-project-title="{{ $project->title }}"
+                               data-main-image="{{ $imageUrl }}"
+                               data-additional-images="{{ $galleryJson }}"
+                               title="View Design Gallery">
+                                <i class="fa-solid fa-images"></i>
+                            </a>
+                            @endif
                             @if($project->github_url)
                             <a href="{{ $project->github_url }}" target="_blank" class="premium-action-btn github-btn" title="GitHub Repository">
                                 <i class="fa-brands fa-github"></i>
@@ -519,6 +545,116 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && modal.style.display === 'flex') {
                 closeModal();
+            }
+        });
+    </script>
+
+    <!-- Project Gallery Lightbox Modal -->
+    <div id="project-gallery-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content gallery-modal-content">
+            <button class="modal-close-btn" id="gallery-close-btn">&times;</button>
+            <h2 id="gallery-project-title" class="modal-title">Project Designs</h2>
+            <div class="gallery-slider-wrapper">
+                <button class="slider-btn prev-btn" id="slider-prev-btn"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="gallery-slider-image-container">
+                    <img id="gallery-active-image" src="" alt="Active Gallery Image">
+                </div>
+                <button class="slider-btn next-btn" id="slider-next-btn"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+            <div id="gallery-thumbnails" class="gallery-thumbnails">
+                <!-- Thumbnail images go here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Project Gallery Lightbox Logic
+        const galleryModal = document.getElementById('project-gallery-modal');
+        const galleryTitle = document.getElementById('gallery-project-title');
+        const activeImage = document.getElementById('gallery-active-image');
+        const galleryCloseBtn = document.getElementById('gallery-close-btn');
+        const thumbnailsContainer = document.getElementById('gallery-thumbnails');
+        const prevBtn = document.getElementById('slider-prev-btn');
+        const nextBtn = document.getElementById('slider-next-btn');
+
+        let galleryImages = [];
+        let currentImageIndex = 0;
+
+        const showImage = (index) => {
+            currentImageIndex = index;
+            activeImage.style.opacity = 0;
+            setTimeout(() => {
+                activeImage.src = galleryImages[currentImageIndex];
+                activeImage.style.opacity = 1;
+            }, 150);
+
+            // Update active thumbnail
+            document.querySelectorAll('.gallery-thumbnail').forEach((thumb, idx) => {
+                if (idx === currentImageIndex) {
+                    thumb.classList.add('active');
+                } else {
+                    thumb.classList.remove('active');
+                }
+            });
+        };
+
+        document.querySelectorAll('.view-project-gallery-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const title = btn.getAttribute('data-project-title');
+                const mainImg = btn.getAttribute('data-main-image');
+                const additional = JSON.parse(btn.getAttribute('data-additional-images') || '[]');
+
+                galleryImages = [mainImg, ...additional];
+                galleryTitle.innerText = `${title} - Design Gallery`;
+                
+                // Render thumbnails
+                thumbnailsContainer.innerHTML = '';
+                galleryImages.forEach((imgUrl, idx) => {
+                    const thumb = document.createElement('img');
+                    thumb.src = imgUrl;
+                    thumb.className = 'gallery-thumbnail';
+                    thumb.addEventListener('click', () => showImage(idx));
+                    thumbnailsContainer.appendChild(thumb);
+                });
+
+                showImage(0);
+                galleryModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        const closeGalleryModal = () => {
+            galleryModal.style.display = 'none';
+            document.body.style.overflow = '';
+        };
+
+        galleryCloseBtn.addEventListener('click', closeGalleryModal);
+        galleryModal.addEventListener('click', (e) => {
+            if (e.target === galleryModal) {
+                closeGalleryModal();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            let nextIdx = currentImageIndex - 1;
+            if (nextIdx < 0) nextIdx = galleryImages.length - 1;
+            showImage(nextIdx);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            let nextIdx = currentImageIndex + 1;
+            if (nextIdx >= galleryImages.length) nextIdx = 0;
+            showImage(nextIdx);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (galleryModal.style.display === 'flex') {
+                if (e.key === 'Escape') closeGalleryModal();
+                if (e.key === 'ArrowLeft') prevBtn.click();
+                if (e.key === 'ArrowRight') nextBtn.click();
             }
         });
     </script>

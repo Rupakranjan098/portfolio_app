@@ -69,9 +69,15 @@
 
         <h3 style="margin-top: 30px; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">Media & Documents</h3>
         <div class="form-group">
-            <label>Project Image</label>
+            <label>Project Cover Image</label>
             <input type="file" class="form-control" name="image_path" required>
             <small style="color: var(--text-muted); margin-top: 5px; display: block;">Recommended size: 800x600px</small>
+        </div>
+
+        <div class="form-group">
+            <label>Additional Design/Gallery Images (Optional, Multiple)</label>
+            <input type="file" class="form-control" name="additional_images[]" multiple>
+            <small style="color: var(--text-muted); margin-top: 5px; display: block;">Select multiple design files</small>
         </div>
 
         <div class="form-group">

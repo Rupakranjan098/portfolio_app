@@ -64,6 +64,7 @@ class AdminController extends Controller
             'card_theme' => 'nullable|string|in:purple,orange,green,blue',
             'card_icon' => 'nullable|string',
             'card_tag' => 'nullable|string',
+            'additional_images.*' => 'nullable|image|max:10240'
         ]);
 
         $data['is_featured'] = $request->has('is_featured');
@@ -75,6 +76,14 @@ class AdminController extends Controller
         if ($request->hasFile('document_path')) {
             $data['document_path'] = $request->file('document_path')->store('project_docs', 'public');
         }
+
+        $additionalImages = [];
+        if ($request->hasFile('additional_images')) {
+            foreach ($request->file('additional_images') as $file) {
+                $additionalImages[] = $file->store('projects/gallery', 'public');
+            }
+        }
+        $data['additional_images'] = $additionalImages;
 
         Project::create($data);
         return redirect()->route('admin.projects.index')->with('success', 'Project created successfully.');
@@ -114,6 +123,9 @@ class AdminController extends Controller
             'card_theme' => 'nullable|string|in:purple,orange,green,blue',
             'card_icon' => 'nullable|string',
             'card_tag' => 'nullable|string',
+            'additional_images.*' => 'nullable|image|max:10240',
+            'delete_images' => 'nullable|array',
+            'delete_images.*' => 'string',
         ]);
 
         $data['is_featured'] = $request->has('is_featured');
@@ -128,6 +140,27 @@ class AdminController extends Controller
             $data['document_path'] = $request->file('document_path')->store('project_docs', 'public');
         }
 
+        // Handle deletion of existing gallery images
+        $existingImages = $project->additional_images ?: [];
+        if ($request->filled('delete_images')) {
+            foreach ($request->input('delete_images') as $deleteImg) {
+                if (($key = array_search($deleteImg, $existingImages)) !== false) {
+                    unset($existingImages[$key]);
+                    Storage::disk('public')->delete($deleteImg);
+                }
+            }
+            $existingImages = array_values($existingImages);
+        }
+
+        // Handle uploading new additional images
+        if ($request->hasFile('additional_images')) {
+            foreach ($request->file('additional_images') as $file) {
+                $existingImages[] = $file->store('projects/gallery', 'public');
+            }
+        }
+
+        $data['additional_images'] = $existingImages;
+
         $project->update($data);
         return redirect()->route('admin.projects.index')->with('success', 'Project updated successfully.');
     }
@@ -136,6 +169,11 @@ class AdminController extends Controller
     {
         if ($project->image_path) Storage::disk('public')->delete($project->image_path);
         if ($project->document_path) Storage::disk('public')->delete($project->document_path);
+        if ($project->additional_images) {
+            foreach ($project->additional_images as $img) {
+                Storage::disk('public')->delete($img);
+            }
+        }
         $project->delete();
         return redirect()->route('admin.projects.index')->with('success', 'Project deleted successfully.');
     }
