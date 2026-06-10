@@ -17,6 +17,20 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/projects', function () {
+    return view('projects', [
+        'profile' => \App\Models\Profile::first(),
+        'projects' => \App\Models\Project::all()
+    ]);
+})->name('projects');
+
+Route::get('/services', function () {
+    return view('services', [
+        'profile' => \App\Models\Profile::first(),
+        'services' => \App\Models\Service::with('projects')->get()
+    ]);
+})->name('services');
+
 // Auth Routes
 Route::get('/login', [App\Http\Controllers\AuthController::class, 'loginForm'])->name('login');
 Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);

@@ -19,11 +19,11 @@
             <span class="logo-text">{{ $profile->name }}</span>
         </div>
         <ul class="nav-links" id="nav-links">
-            <li><a href="#home" class="active">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="{{ url('/') }}#home" class="active">Home</a></li>
+            <li><a href="{{ url('/') }}#about">About</a></li>
+            <li><a href="{{ url('/') }}#services">Services</a></li>
+            <li><a href="{{ url('/') }}#projects">Projects</a></li>
+            <li><a href="{{ url('/') }}#contact">Contact</a></li>
         </ul>
         <div class="nav-actions">
             <a href="{{ $profile->cv_path ? Storage::url($profile->cv_path) : '#' }}" class="btn btn-outline cv-btn">Download CV <i class="fa-solid fa-download"></i></a>
@@ -37,73 +37,9 @@
         </div>
     </nav>
 
-    <header id="home" class="hero container">
-        <div class="hero-content">
-            <div class="badge"><i class="fa-solid fa-hand-wave"></i> Hello, I'm</div>
-            <h1 class="hero-title">{{ $profile->name }}</h1>
-            <h2 class="hero-subtitle">{{ $profile->subtitle }}</h2>
-            <p class="hero-desc">{{ $profile->description }}</p>
-            <div class="hero-btns">
-                <a href="#projects" class="btn btn-primary">View My Work <i class="fa-solid fa-arrow-right"></i></a>
-                <a href="#contact" class="btn btn-outline-border">Contact Me <i class="fa-regular fa-envelope"></i></a>
-            </div>
-            <div class="social-links">
-                <span>Follow Me</span>
-                @if($profile->linkedin_url) <a href="{{ $profile->linkedin_url }}" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a> @endif
-                @if($profile->github_url) <a href="{{ $profile->github_url }}" target="_blank"><i class="fa-brands fa-github"></i></a> @endif
-                @if($profile->twitter_url) <a href="{{ $profile->twitter_url }}" target="_blank"><i class="fa-brands fa-twitter"></i></a> @endif
-                @if($profile->website_url) <a href="{{ $profile->website_url }}" target="_blank"><i class="fa-solid fa-globe"></i></a> @endif
-            </div>
-        </div>
-        <div class="hero-image">
-            @if($profile->available_for_freelance)
-            <div class="status-badge">
-                <span class="status-dot"></span> Available for<br/><strong>Freelance</strong>
-            </div>
-            @endif
-            @php
-                $heroImgUrl = $profile->hero_image;
-                if (!str_starts_with($heroImgUrl, 'http') && !str_starts_with($heroImgUrl, '/')) {
-                    $heroImgUrl = asset('storage/' . $heroImgUrl);
-                }
-            @endphp
-            <img src="{{ $heroImgUrl }}" alt="{{ $profile->name }} 3D avatar">
-            <div class="decoration-dots"></div>
-        </div>
-    </header>
+    
 
-    <section id="about" class="about container">
-        <div class="about-grid">
-            <div class="about-text">
-                <div class="section-label">About Me</div>
-                <h2 class="section-title">{{ $profile->about_title }}</h2>
-                <p class="section-desc">{{ $profile->about_description }}</p>
-                <a href="#" class="read-more">Read More <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-            <div class="about-stats">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fa-regular fa-face-smile"></i></div>
-                    <div class="stat-number">{{ $profile->experience_years }}</div>
-                    <div class="stat-text">Years Experience</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fa-solid fa-briefcase"></i></div>
-                    <div class="stat-number">{{ $profile->projects_completed }}</div>
-                    <div class="stat-text">Projects Completed</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
-                    <div class="stat-number">{{ $profile->happy_clients }}</div>
-                    <div class="stat-text">Happy Clients</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fa-solid fa-award"></i></div>
-                    <div class="stat-number">{{ $profile->awards_received }}</div>
-                    <div class="stat-text">Awards Received</div>
-                </div>
-            </div>
-        </div>
-    </section>
+    
 
     <section id="services" class="services container">
         <div class="section-header">
@@ -111,7 +47,7 @@
                 <div class="section-label">What I Do</div>
                 <h2 class="section-title">My Services</h2>
             </div>
-            <a href="{{ route('services') }}" class="view-all">View All Services <i class="fa-solid fa-arrow-right"></i></a>
+            
         </div>
         <div class="services-grid">
             @foreach($services as $service)
@@ -137,7 +73,7 @@
                     @if($service->projects->count() > 0)
                         <a href="javascript:void(0)" class="learn-more view-service-projects-btn" data-service-title="{{ $service->title }}" data-projects="{{ json_encode($service->projects) }}">View Work <i class="fa-solid fa-arrow-right"></i></a>
                     @else
-                        <a href="#contact" class="learn-more">Inquire Work <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="{{ url('/') }}#contact" class="learn-more">Inquire Work <i class="fa-solid fa-arrow-right"></i></a>
                     @endif
                 </div>
             </div>
@@ -145,145 +81,9 @@
         </div>
     </section>
 
-    <section id="projects" class="projects container">
-        <div class="section-header">
-            <div>
-                <div class="section-label"><span class="badge-dot"></span> My Work</div>
-                <h2 class="section-title">Featured Projects</h2>
-            </div>
-            <a href="{{ route('projects') }}" class="view-all">View All Projects <span class="view-all-circle"><i class="fa-solid fa-arrow-right"></i></span></a>
-        </div>
-        <div class="projects-grid">
-            @foreach($projects as $project)
-            @php
-                $themeClass = 'theme-' . ($project->card_theme ?: 'purple');
-                $iconClass = $project->card_icon ?: 'fa-solid fa-cube';
-                $tagText = $project->card_tag ?: 'Dev';
+    
 
-                $imageUrl = $project->image_path;
-                if (!str_starts_with($imageUrl, 'http') && !str_starts_with($imageUrl, '/')) {
-                    $imageUrl = asset('storage/' . $imageUrl);
-                }
-            @endphp
-            <div class="premium-project-card {{ $themeClass }}">
-                @php
-                    $hasGallery = $project->additional_images && count($project->additional_images) > 0;
-                    $galleryJson = '';
-                    if ($hasGallery) {
-                        $galleryUrls = [];
-                        foreach ($project->additional_images as $img) {
-                            $galleryUrls[] = str_starts_with($img, 'http') || str_starts_with($img, '/') ? $img : asset('storage/' . $img);
-                        }
-                        $galleryJson = json_encode($galleryUrls);
-                    }
-                @endphp
-
-                @if($hasGallery)
-                <a href="javascript:void(0)" class="premium-project-link view-project-gallery-btn" 
-                   data-project-title="{{ $project->title }}"
-                   data-main-image="{{ $imageUrl }}"
-                   data-additional-images="{{ $galleryJson }}">
-                @elseif($project->project_url)
-                <a href="{{ $project->project_url }}" target="_blank" class="premium-project-link">
-                @endif
-                <div class="premium-project-img-wrapper">
-                    <img src="{{ $imageUrl }}" alt="{{ $project->title }}">
-                    <div class="premium-project-icon">
-                        <i class="{{ $iconClass }}"></i>
-                    </div>
-                </div>
-                @if($hasGallery || $project->project_url)
-                </a>
-                @endif
-                <div class="premium-project-info">
-                    @if($project->project_url)
-                    <a href="{{ $project->project_url }}" target="_blank" class="premium-project-title-link">
-                    @endif
-                    <h3 class="premium-project-title">{{ $project->title }}</h3>
-                    @if($project->project_url)
-                    </a>
-                    @endif
-                    <span class="premium-project-category">{{ $project->category }}</span>
-                    @if($project->description)
-                        <p class="premium-project-desc">{{ $project->description }}</p>
-                    @endif
-                    <div class="premium-project-footer">
-                        <span class="premium-tag">{{ $tagText }}</span>
-                        <div class="premium-project-actions">
-                            @if($hasGallery)
-                            <a href="javascript:void(0)" class="premium-action-btn gallery-btn view-project-gallery-btn" 
-                               data-project-title="{{ $project->title }}"
-                               data-main-image="{{ $imageUrl }}"
-                               data-additional-images="{{ $galleryJson }}"
-                               title="View Design Gallery">
-                                <i class="fa-solid fa-images"></i>
-                            </a>
-                            @endif
-                            @if($project->github_url)
-                            <a href="{{ $project->github_url }}" target="_blank" class="premium-action-btn github-btn" title="GitHub Repository">
-                                <i class="fa-brands fa-github"></i>
-                            </a>
-                            @endif
-                            @if($project->project_url)
-                            <a href="{{ $project->project_url }}" target="_blank" class="premium-action-btn live-btn" title="Live Site">
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </a>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endforeach
-        </div>
-    </section>
-
-    <section class="skills-process-section container">
-        <div class="skills-container">
-            <div class="section-label">My Skills</div>
-            <h2 class="section-title">Tools I Work With</h2>
-            <div class="skills-list">
-                @foreach($skills as $skill)
-                <div class="skill-box">
-                    @php
-                        $isStored = str_starts_with($skill->icon_class, 'skills/');
-                        $iconUrl = $isStored ? asset('storage/' . $skill->icon_class) : $skill->icon_class;
-                    @endphp
-                    @if(str_contains($skill->icon_class, '<i'))
-                        {!! $skill->icon_class !!}
-                    @elseif($isStored || str_starts_with($skill->icon_class, 'http') || str_starts_with($skill->icon_class, '/'))
-                        <img src="{{ $iconUrl }}" alt="{{ $skill->name }}">
-                    @else
-                        <i class="{{ $skill->icon_class }}" @if($skill->color) style="color: {{ $skill->color }};" @endif></i>
-                    @endif
-                    <span>{{ $skill->name }}</span>
-                </div>
-                @endforeach
-            </div>
-        </div>
-        
-        <div class="process-container">
-            <div class="section-label">My Process</div>
-            <h2 class="section-title">How I Work</h2>
-            <div class="process-timeline">
-                @foreach($processes as $process)
-                <div class="process-item">
-                    <div class="step-number">{{ str_pad($process->step_number, 2, '0', STR_PAD_LEFT) }}</div>
-                    <div class="step-circle" style="overflow: hidden;">
-                        @if(str_starts_with($process->icon, 'http') || str_starts_with($process->icon, '/') || str_starts_with($process->icon, 'processes/'))
-                            <img src="{{ str_starts_with($process->icon, 'processes/') ? asset('storage/' . $process->icon) : $process->icon }}" alt="" style="width: 100%; height: 100%; object-fit: contain; padding: 10px;">
-                        @else
-                            <i class="{{ $process->icon }}"></i>
-                        @endif
-                    </div>
-                    <div class="process-card">
-                        <h4>{{ $process->title }}</h4>
-                        <p>{{ $process->description }}</p>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
+    
 
 
     <footer id="contact" class="footer container">
@@ -299,16 +99,16 @@
                 <div class="link-group">
                     <h4>Quick Links</h4>
                     <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#services">Services</a></li>
+                        <li><a href="{{ url('/') }}#home">Home</a></li>
+                        <li><a href="{{ url('/') }}#about">About</a></li>
+                        <li><a href="{{ url('/') }}#services">Services</a></li>
                     </ul>
                 </div>
                 <div class="link-group">
                     <h4 style="opacity:0">.</h4>
                     <ul>
-                        <li><a href="#projects">Projects</a></li>
-                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="{{ url('/') }}#projects">Projects</a></li>
+                        <li><a href="{{ url('/') }}#contact">Contact</a></li>
                     </ul>
                 </div>
                 <div class="link-group">
