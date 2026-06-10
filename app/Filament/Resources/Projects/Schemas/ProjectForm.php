@@ -25,10 +25,6 @@ class ProjectForm
                 TextInput::make('github_url')
                     ->url()
                     ->label('GitHub URL'),
-                FileUpload::make('additional_images')
-                    ->multiple()
-                    ->image()
-                    ->label('Additional Design/Gallery Images'),
             ]);
     }
 }

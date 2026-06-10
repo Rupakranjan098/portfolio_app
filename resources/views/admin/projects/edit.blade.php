@@ -77,29 +77,6 @@
             </div>
         </div>
 
-        <div class="form-group" style="margin-bottom: 25px;">
-            <label>Additional Design/Gallery Images (Upload to add new ones)</label>
-            <input type="file" class="form-control" name="additional_images[]" multiple>
-            <small style="color: var(--text-muted); margin-top: 5px; display: block;">Select multiple design files to add to the gallery</small>
-            
-            @if($project->additional_images && count($project->additional_images) > 0)
-                <div style="margin-top: 15px;">
-                    <label style="font-weight: 500; font-size: 0.9rem; display: block; margin-bottom: 10px;">Current Gallery Images (Check to Delete):</label>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px;">
-                        @foreach($project->additional_images as $image)
-                            <div style="position: relative; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; background: #fff;">
-                                <img src="{{ str_starts_with($image, '/') ? $image : Storage::url($image) }}" style="width: 100%; height: 80px; object-fit: cover;">
-                                <div style="padding: 5px; text-align: center; border-top: 1px solid #e2e8f0; background: #f8fafc;">
-                                    <label style="font-size: 11px; color: #dc2626; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                                        <input type="checkbox" name="delete_images[]" value="{{ $image }}"> Delete
-                                    </label>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
-        </div>
 
         <div class="form-group">
             <label>Project Document (Leave blank to keep current)</label>

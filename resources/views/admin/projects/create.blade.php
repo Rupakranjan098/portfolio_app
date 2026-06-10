@@ -74,11 +74,6 @@
             <small style="color: var(--text-muted); margin-top: 5px; display: block;">Recommended size: 800x600px</small>
         </div>
 
-        <div class="form-group">
-            <label>Additional Design/Gallery Images (Optional, Multiple)</label>
-            <input type="file" class="form-control" name="additional_images[]" multiple>
-            <small style="color: var(--text-muted); margin-top: 5px; display: block;">Select multiple design files</small>
-        </div>
 
         <div class="form-group">
             <label>Project Document (Optional PDF/Word/ZIP)</label>
