@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ time() }}">
+    @viteReactRefresh
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/app.jsx'])
 </head>
 <body>
     <nav class="navbar container">
@@ -71,6 +73,8 @@
             <div class="decoration-dots"></div>
         </div>
     </header>
+
+    <div id="react-root" class="container"></div>
 
     <section id="about" class="about container">
         <div class="about-grid">
