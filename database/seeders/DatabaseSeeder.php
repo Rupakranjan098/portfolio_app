@@ -93,11 +93,6 @@ class DatabaseSeeder extends Seeder
             'icon' => 'fa-code'
         ]);
         Service::create([
-            'title' => 'Web/App',
-            'description' => 'Web and Application Development.',
-            'icon' => 'fa-laptop-code'
-        ]);
-        Service::create([
             'title' => 'Web',
             'description' => 'Web Development.',
             'icon' => 'fa-globe'
