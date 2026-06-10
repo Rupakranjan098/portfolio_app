@@ -78,18 +78,7 @@
         </div>
 
 
-        <div class="form-group">
-            <label>Project Document (Leave blank to keep current)</label>
-            @if($project->document_path)
-                <div style="margin-bottom: 10px;">
-                    <a href="{{ Storage::url($project->document_path) }}" target="_blank" class="btn btn-outline" style="font-size: 13px; padding: 5px 12px;">
-                        <i class="fa-solid fa-file-lines"></i> View Current Document
-                    </a>
-                </div>
-            @endif
-            <input type="file" class="form-control" name="document_path">
-            <small style="color: var(--text-muted); margin-top: 5px; display: block;">PDF, Word, or ZIP. Max size: 10MB</small>
-        </div>
+
 
         <!-- Hidden inputs or placeholder for featured project layouts if needed -->
         <input type="checkbox" name="is_featured" value="1" style="display:none" {{ $project->is_featured ? 'checked' : '' }}>

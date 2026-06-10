@@ -15,7 +15,7 @@
                     <th>Title</th>
                     <th>Category</th>
                     <th>Service Card</th>
-                    <th>Doc</th>
+
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -44,15 +44,7 @@
                             <span style="color: var(--text-muted); font-size: 12px; font-style: italic;">None</span>
                         @endif
                     </td>
-                    <td>
-                        @if($project->document_path)
-                            <a href="{{ Storage::url($project->document_path) }}" target="_blank" style="color: #ff6b01; font-size: 18px;" title="View Document">
-                                <i class="fa-solid fa-file-pdf"></i>
-                            </a>
-                        @else
-                            <span style="color: #e2e8f0;"><i class="fa-solid fa-file-circle-xmark"></i></span>
-                        @endif
-                    </td>
+
                     <td>
                         <div class="actions">
                             <a href="{{ route('admin.projects.edit', $project) }}" class="action-btn btn-edit" title="Edit"><i class="fa-solid fa-pen"></i></a>

@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ time() }}">
-    @viteReactRefresh
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/app.jsx'])
 </head>
 <body>
     <nav class="navbar container">
@@ -73,8 +71,6 @@
             <div class="decoration-dots"></div>
         </div>
     </header>
-
-    <div id="react-root" class="container"></div>
 
     <section id="about" class="about container">
         <div class="about-grid">
@@ -510,10 +506,7 @@
                     if (project.github_url) {
                         linkHtml += `<a href="${project.github_url}" target="_blank" class="btn btn-outline btn-sm" style="border: 1px solid var(--border-color);"><i class="fa-brands fa-github"></i> GitHub</a>`;
                     }
-                    if (project.document_path) {
-                        const docUrl = `${baseUrl}storage/${project.document_path}`;
-                        linkHtml += `<a href="${docUrl}" target="_blank" class="btn btn-outline btn-sm" style="border: 1px solid var(--border-color);"><i class="fa-solid fa-file-pdf"></i> View Doc</a>`;
-                    }
+
 
                     projectCard.innerHTML = `
                         <div class="modal-project-img">

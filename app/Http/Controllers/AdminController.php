@@ -56,7 +56,7 @@ class AdminController extends Controller
             'project_url' => 'nullable|url',
             'github_url' => 'nullable|url',
             'image_path' => 'required|image',
-            'document_path' => 'nullable|file|mimes:pdf,doc,docx,zip|max:10240',
+
             'description' => 'nullable|string',
             'features' => 'nullable|string',
             'tech_stack' => 'nullable|string',
@@ -72,9 +72,7 @@ class AdminController extends Controller
             $data['image_path'] = $request->file('image_path')->store('projects', 'public');
         }
 
-        if ($request->hasFile('document_path')) {
-            $data['document_path'] = $request->file('document_path')->store('project_docs', 'public');
-        }
+
 
 
 
@@ -108,7 +106,7 @@ class AdminController extends Controller
             'project_url' => 'nullable|url',
             'github_url' => 'nullable|url',
             'image_path' => 'nullable|image',
-            'document_path' => 'nullable|file|mimes:pdf,doc,docx,zip|max:10240',
+
             'description' => 'nullable|string',
             'features' => 'nullable|string',
             'tech_stack' => 'nullable|string',
@@ -125,10 +123,7 @@ class AdminController extends Controller
             $data['image_path'] = $request->file('image_path')->store('projects', 'public');
         }
 
-        if ($request->hasFile('document_path')) {
-            if ($project->document_path) Storage::disk('public')->delete($project->document_path);
-            $data['document_path'] = $request->file('document_path')->store('project_docs', 'public');
-        }
+
 
 
 
@@ -139,7 +134,7 @@ class AdminController extends Controller
     public function projectDestroy(Project $project)
     {
         if ($project->image_path) Storage::disk('public')->delete($project->image_path);
-        if ($project->document_path) Storage::disk('public')->delete($project->document_path);
+
 
         $project->delete();
         return redirect()->route('admin.projects.index')->with('success', 'Project deleted successfully.');

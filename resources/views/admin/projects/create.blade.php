@@ -75,11 +75,7 @@
         </div>
 
 
-        <div class="form-group">
-            <label>Project Document (Optional PDF/Word/ZIP)</label>
-            <input type="file" class="form-control" name="document_path">
-            <small style="color: var(--text-muted); margin-top: 5px; display: block;">Max size: 10MB</small>
-        </div>
+
 
         <!-- Hidden inputs or placeholder for featured project layouts if needed -->
         <input type="checkbox" name="is_featured" value="1" style="display:none">
