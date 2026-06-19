@@ -114,7 +114,7 @@ class AdminController extends Controller
             'card_tag' => 'nullable|string'
         ];
 
-        if ($request->hasFile('image_path')) {
+        if ($request->file('image_path')) {
             $rules['image_path'] = 'image';
         }
 
@@ -211,7 +211,7 @@ class AdminController extends Controller
             'text' => 'required',
         ];
 
-        if ($request->hasFile('avatar_url')) {
+        if ($request->file('avatar_url')) {
             $rules['avatar_url'] = 'image';
         }
 
@@ -238,7 +238,7 @@ class AdminController extends Controller
             'text' => 'required',
         ];
 
-        if ($request->hasFile('avatar_url')) {
+        if ($request->file('avatar_url')) {
             $rules['avatar_url'] = 'image';
         }
 
@@ -303,11 +303,11 @@ class AdminController extends Controller
             'awards_received' => 'nullable',
         ];
 
-        if ($request->hasFile('hero_image')) {
+        if ($request->file('hero_image')) {
             $rules['hero_image'] = 'image';
         }
 
-        if ($request->hasFile('cv_path')) {
+        if ($request->file('cv_path')) {
             $rules['cv_path'] = 'file|mimes:pdf,doc,docx|max:5120';
         }
 
@@ -352,7 +352,7 @@ class AdminController extends Controller
             'icon_class' => 'nullable',
         ];
 
-        if ($request->hasFile('icon_file')) {
+        if ($request->file('icon_file')) {
             $rules['icon_file'] = 'image';
         }
 
@@ -380,7 +380,7 @@ class AdminController extends Controller
             'icon_class' => 'nullable',
         ];
 
-        if ($request->hasFile('icon_file')) {
+        if ($request->file('icon_file')) {
             $rules['icon_file'] = 'image';
         }
 
@@ -429,7 +429,7 @@ class AdminController extends Controller
             'step_number' => 'required|integer'
         ];
 
-        if ($request->hasFile('icon_file')) {
+        if ($request->file('icon_file')) {
             $rules['icon_file'] = 'image';
         }
 
@@ -459,7 +459,7 @@ class AdminController extends Controller
             'step_number' => 'required|integer'
         ];
 
-        if ($request->hasFile('icon_file')) {
+        if ($request->file('icon_file')) {
             $rules['icon_file'] = 'image';
         }
 
