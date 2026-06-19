@@ -98,15 +98,13 @@ class AdminController extends Controller
             }
         }
 
-        $data = $request->validate([
+        $rules = [
             'title' => 'required',
             'subtitle' => 'nullable|string',
             'category' => 'required',
             'service_id' => 'nullable|exists:services,id',
             'project_url' => 'nullable|url',
             'github_url' => 'nullable|url',
-            'image_path' => 'nullable|image',
-
             'description' => 'nullable|string',
             'features' => 'nullable|string',
             'tech_stack' => 'nullable|string',
@@ -114,7 +112,13 @@ class AdminController extends Controller
             'card_theme' => 'nullable|string|in:purple,orange,green,blue',
             'card_icon' => 'nullable|string',
             'card_tag' => 'nullable|string'
-        ]);
+        ];
+
+        if ($request->hasFile('image_path')) {
+            $rules['image_path'] = 'image';
+        }
+
+        $data = $request->validate($rules);
 
         $data['is_featured'] = $request->has('is_featured');
 
@@ -201,12 +205,17 @@ class AdminController extends Controller
 
     public function testimonialStore(Request $request)
     {
-        $data = $request->validate([
+        $rules = [
             'client_name' => 'required',
             'client_title' => 'required',
             'text' => 'required',
-            'avatar_url' => 'nullable|image|url'
-        ]);
+        ];
+
+        if ($request->hasFile('avatar_url')) {
+            $rules['avatar_url'] = 'image';
+        }
+
+        $data = $request->validate($rules);
 
         if ($request->hasFile('avatar_url')) {
             $data['avatar_url'] = $request->file('avatar_url')->store('avatars', 'public');
@@ -223,12 +232,17 @@ class AdminController extends Controller
 
     public function testimonialUpdate(Request $request, Testimonial $testimonial)
     {
-        $data = $request->validate([
+        $rules = [
             'client_name' => 'required',
             'client_title' => 'required',
             'text' => 'required',
-            'avatar_url' => 'nullable'
-        ]);
+        ];
+
+        if ($request->hasFile('avatar_url')) {
+            $rules['avatar_url'] = 'image';
+        }
+
+        $data = $request->validate($rules);
 
         if ($request->hasFile('avatar_url')) {
             if ($testimonial->avatar_url && !str_starts_with($testimonial->avatar_url, 'http')) {
@@ -270,7 +284,7 @@ class AdminController extends Controller
             }
         }
 
-        $data = $request->validate([
+        $rules = [
             'name' => 'required',
             'subtitle' => 'required',
             'description' => 'required',
@@ -287,9 +301,17 @@ class AdminController extends Controller
             'projects_completed' => 'nullable',
             'happy_clients' => 'nullable',
             'awards_received' => 'nullable',
-            'hero_image' => 'nullable|image',
-            'cv_path' => 'nullable|file|mimes:pdf,doc,docx|max:5120'
-        ]);
+        ];
+
+        if ($request->hasFile('hero_image')) {
+            $rules['hero_image'] = 'image';
+        }
+
+        if ($request->hasFile('cv_path')) {
+            $rules['cv_path'] = 'file|mimes:pdf,doc,docx|max:5120';
+        }
+
+        $data = $request->validate($rules);
 
         $data['available_for_freelance'] = $request->has('available_for_freelance');
 
@@ -325,11 +347,16 @@ class AdminController extends Controller
 
     public function skillsStore(Request $request)
     {
-        $data = $request->validate([
+        $rules = [
             'name' => 'required',
             'icon_class' => 'nullable',
-            'icon_file' => 'nullable|image',
-        ]);
+        ];
+
+        if ($request->hasFile('icon_file')) {
+            $rules['icon_file'] = 'image';
+        }
+
+        $data = $request->validate($rules);
 
         if ($request->hasFile('icon_file')) {
             $data['icon_class'] = $request->file('icon_file')->store('skills', 'public');
@@ -348,11 +375,16 @@ class AdminController extends Controller
 
     public function skillsUpdate(Request $request, \App\Models\Skill $skill)
     {
-        $data = $request->validate([
+        $rules = [
             'name' => 'required',
             'icon_class' => 'nullable',
-            'icon_file' => 'nullable|image',
-        ]);
+        ];
+
+        if ($request->hasFile('icon_file')) {
+            $rules['icon_file'] = 'image';
+        }
+
+        $data = $request->validate($rules);
 
         if ($request->hasFile('icon_file')) {
             if (str_starts_with($skill->icon_class, 'skills/')) {
@@ -390,13 +422,18 @@ class AdminController extends Controller
 
     public function processesStore(Request $request)
     {
-        $data = $request->validate([
+        $rules = [
             'title' => 'required',
             'description' => 'required',
             'icon' => 'nullable',
-            'icon_file' => 'nullable|image',
             'step_number' => 'required|integer'
-        ]);
+        ];
+
+        if ($request->hasFile('icon_file')) {
+            $rules['icon_file'] = 'image';
+        }
+
+        $data = $request->validate($rules);
 
         if ($request->hasFile('icon_file')) {
             $data['icon'] = $request->file('icon_file')->store('processes', 'public');
@@ -415,13 +452,18 @@ class AdminController extends Controller
 
     public function processesUpdate(Request $request, \App\Models\Process $process)
     {
-        $data = $request->validate([
+        $rules = [
             'title' => 'required',
             'description' => 'required',
             'icon' => 'nullable',
-            'icon_file' => 'nullable|image',
             'step_number' => 'required|integer'
-        ]);
+        ];
+
+        if ($request->hasFile('icon_file')) {
+            $rules['icon_file'] = 'image';
+        }
+
+        $data = $request->validate($rules);
 
         if ($request->hasFile('icon_file')) {
             if (str_starts_with($process->icon, 'processes/')) {
