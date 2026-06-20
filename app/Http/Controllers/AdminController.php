@@ -88,6 +88,20 @@ class AdminController extends Controller
 
     public function projectUpdate(Request $request, Project $project)
     {
+        // Debug file uploads
+        $logData = [
+            'timestamp' => date('Y-m-d H:i:s'),
+            'has_file' => $request->hasFile('image_path'),
+            'file_exists' => !is_null($request->file('image_path')),
+            'file_class' => $request->file('image_path') ? get_class($request->file('image_path')) : 'null',
+            'error_code' => $request->file('image_path') ? $request->file('image_path')->getError() : 'N/A',
+            'error_message' => $request->file('image_path') ? $request->file('image_path')->getErrorMessage() : 'N/A',
+            'mime_type' => $request->file('image_path') ? $request->file('image_path')->getMimeType() : 'N/A',
+            'size' => $request->file('image_path') ? $request->file('image_path')->getSize() : 'N/A',
+            'raw_files' => $_FILES,
+        ];
+        file_put_contents(storage_path('logs/upload_debug.log'), json_encode($logData, JSON_PRETTY_PRINT) . "\n", FILE_APPEND);
+
         $urlFields = ['project_url', 'github_url'];
         foreach ($urlFields as $field) {
             if ($request->filled($field)) {
