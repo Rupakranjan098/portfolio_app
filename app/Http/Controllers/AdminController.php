@@ -38,6 +38,7 @@ class AdminController extends Controller
 
     public function projectStore(Request $request)
     {
+        $this->fixUploadedFiles($request);
         $urlFields = ['project_url', 'github_url'];
         foreach ($urlFields as $field) {
             if ($request->filled($field)) {
@@ -88,20 +89,7 @@ class AdminController extends Controller
 
     public function projectUpdate(Request $request, Project $project)
     {
-        // Debug file uploads
-        $logData = [
-            'timestamp' => date('Y-m-d H:i:s'),
-            'has_file' => $request->hasFile('image_path'),
-            'file_exists' => !is_null($request->file('image_path')),
-            'file_class' => $request->file('image_path') ? get_class($request->file('image_path')) : 'null',
-            'error_code' => $request->file('image_path') ? $request->file('image_path')->getError() : 'N/A',
-            'error_message' => $request->file('image_path') ? $request->file('image_path')->getErrorMessage() : 'N/A',
-            'mime_type' => $request->file('image_path') ? $request->file('image_path')->getMimeType() : 'N/A',
-            'size' => $request->file('image_path') ? $request->file('image_path')->getSize() : 'N/A',
-            'raw_files' => $_FILES,
-        ];
-        file_put_contents(storage_path('logs/upload_debug.log'), json_encode($logData, JSON_PRETTY_PRINT) . "\n", FILE_APPEND);
-
+        $this->fixUploadedFiles($request);
         $urlFields = ['project_url', 'github_url'];
         foreach ($urlFields as $field) {
             if ($request->filled($field)) {
@@ -219,6 +207,7 @@ class AdminController extends Controller
 
     public function testimonialStore(Request $request)
     {
+        $this->fixUploadedFiles($request);
         $rules = [
             'client_name' => 'required',
             'client_title' => 'required',
@@ -246,6 +235,7 @@ class AdminController extends Controller
 
     public function testimonialUpdate(Request $request, Testimonial $testimonial)
     {
+        $this->fixUploadedFiles($request);
         $rules = [
             'client_name' => 'required',
             'client_title' => 'required',
@@ -287,6 +277,7 @@ class AdminController extends Controller
 
     public function profileUpdate(Request $request)
     {
+        $this->fixUploadedFiles($request);
         $profile = Profile::first();
         $urlFields = ['linkedin_url', 'github_url', 'twitter_url', 'website_url'];
         foreach ($urlFields as $field) {
@@ -361,6 +352,7 @@ class AdminController extends Controller
 
     public function skillsStore(Request $request)
     {
+        $this->fixUploadedFiles($request);
         $rules = [
             'name' => 'required',
             'icon_class' => 'nullable',
@@ -389,6 +381,7 @@ class AdminController extends Controller
 
     public function skillsUpdate(Request $request, \App\Models\Skill $skill)
     {
+        $this->fixUploadedFiles($request);
         $rules = [
             'name' => 'required',
             'icon_class' => 'nullable',
@@ -436,6 +429,7 @@ class AdminController extends Controller
 
     public function processesStore(Request $request)
     {
+        $this->fixUploadedFiles($request);
         $rules = [
             'title' => 'required',
             'description' => 'required',
@@ -466,6 +460,7 @@ class AdminController extends Controller
 
     public function processesUpdate(Request $request, \App\Models\Process $process)
     {
+        $this->fixUploadedFiles($request);
         $rules = [
             'title' => 'required',
             'description' => 'required',
@@ -499,6 +494,22 @@ class AdminController extends Controller
         }
         $process->delete();
         return redirect()->route('admin.processes.index')->with('success', 'Process step deleted successfully.');
+    }
+
+    protected function fixUploadedFiles(Request $request)
+    {
+        foreach ($request->files->all() as $key => $file) {
+            if ($file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+                $newFile = new \Illuminate\Http\UploadedFile(
+                    $file->getPathname(),
+                    $file->getClientOriginalName(),
+                    $file->getClientMimeType(),
+                    $file->getError(),
+                    true // testMode = true
+                );
+                $request->files->set($key, $newFile);
+            }
+        }
     }
 
     public function documentation()
