@@ -78,7 +78,6 @@
                 <div class="section-label">About Me</div>
                 <h2 class="section-title">{{ $profile->about_title }}</h2>
                 <p class="section-desc">{{ $profile->about_description }}</p>
-                <a href="#" class="read-more">Read More <i class="fa-solid fa-arrow-right"></i></a>
             </div>
             <div class="about-stats">
                 <div class="stat-card">
