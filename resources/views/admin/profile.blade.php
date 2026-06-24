@@ -36,10 +36,14 @@
         </div>
 
         <h3 style="font-size: 18px; margin: 30px 0 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color);">Contact & Location</h3>
-        <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px;">
             <div class="form-group">
                 <label>Email Address</label>
                 <input type="email" class="form-control" name="email" value="{{ $profile->email }}">
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" class="form-control" name="phone" value="{{ $profile->phone }}">
             </div>
             <div class="form-group">
                 <label>Location</label>

@@ -314,6 +314,7 @@
                     <h4>Connect</h4>
                     <ul>
                         @if($profile->email) <li><a href="mailto:{{ $profile->email }}">Email Me</a></li> @endif
+                        @if($profile->phone) <li><a href="tel:{{ $profile->phone }}">Call Me: {{ $profile->phone }}</a></li> @endif
                         @if($profile->linkedin_url) <li><a href="{{ $profile->linkedin_url }}" target="_blank" rel="noopener noreferrer">LinkedIn</a></li> @endif
                         @if($profile->github_url) <li><a href="{{ $profile->github_url }}" target="_blank" rel="noopener noreferrer">GitHub</a></li> @endif
                     </ul>
